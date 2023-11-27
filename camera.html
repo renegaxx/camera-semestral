@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="bacana.css">
+</head>
+
+<body>
+    <div id="cima-tudo">
+        <img class="logo" src="logo cinema.png">
+        <div class="texto-cima">
+            <button class="nav-botoes">
+                <p>Filmes</p>
+            </button>
+            <button class="nav-botoes">
+                <p>Catálogo</p>
+            </button>
+            <button class="nav-botoes">
+                <p>Notícias</p>
+            </button>
+            <button class="nav-botoes">
+                <p>Novo</p>
+            </button>
+        </div>
+
+        <div class="menu-search">
+            <img class="imgs1" src="search.png" onclick="togglePesquisa()">
+            <img class="imgs2" src="menu.png" onclick="toggleMenu()">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Pesquisar...">
+                <button class="nav-botoes" id="searchButton" onclick="togglePesquisa()">
+                    <p>Pesquisar</p>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="baixo-nav">
+        <div class="texto-baixo-nav">
+            <h1>Mergulhe Completamente <br>no<span> nosso Site</span></h1>
+            <p><i> através da sua própria lente! Para garantir um acesso personalizado e seguro, convidamos você a abrir
+                    a câmera do seu dispositivo e tirar uma foto única e especial.</i></p>
+            <button onclick="abrirCamera()">Abrir camera</button>
+            <button onclick="tirarFoto()">Tirar foto</button>
+            <button onclick="fechar()">Fechar camera</button>
+        </div>
+        <div class="container-camera">
+            <div class="face">
+                <video id="camera" autoplay></video>
+                <img class="sorriso" src="image-removebg-preview.png">
+                <div class="abaixo">
+                    <i>Dá um sorrisão ae</i>
+                </div>
+            </div>
+            <div class="face">
+                <div id="foto"></div>
+                <img class="sorriso2" src="image-removebg-preview (2).png">
+                <div class="abaixo">
+                    <i>foto tirada com sucesso</i>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+        <script>
+
+            var mediaStream;
+
+            function abrirCamera() {
+
+                navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+                    .then(function (stream) {
+                        mediaStream = stream;
+                        const areaVideo = document.getElementById('camera');
+                        areaVideo.srcObject = stream;
+                    })
+                    .catch(function (error) {
+                        console.log('Error ao acessar a cÃ¢mera', error);
+                    })
+            }
+            function tirarFoto() {
+                const areaVideo = document.getElementById('camera')
+                const canvas = document.createElement('canvas')
+                canvas.width = areaVideo.videoWidth
+                canvas.height = areaVideo.videoHeight
+                const context = canvas.getContext('2d')
+                context.drawImage(areaVideo, 0, 0, canvas.width, canvas.height)
+                const imageDataURL = canvas.toDataURL()
+                const fotoDiv = document.getElementById('foto')
+                fotoDiv.style.backgroundImage = `url(${imageDataURL})`
+                const downloadLink = document.createElement('a')
+                downloadLink.href = imageDataURL
+                downloadLink.download = 'foto.png'
+                downloadLink.textContent = 'Clique para baixar'
+                document.body.appendChild(downloadLink)
+            }
+            function fechar() {
+                navigator.mediaDevices.getUserMedia({ video: false });
+                const areaVideo = document.getElementById('camera');
+                areaVideo.srcObject = null;
+                mediaStream = null;
+            }
+        </script>
+</body>
+
+</html>
